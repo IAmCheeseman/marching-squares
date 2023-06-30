@@ -4,6 +4,7 @@ local square_size = 8
 local sample_size = 0.15
 local width = 64
 local height = 64
+local noise_z = 0
 
 local camera_x = 0
 local camera_y = 0
@@ -11,17 +12,12 @@ local camera_y = 0
 local function get_noise(x, y)
     local dx = (x + math.floor(camera_x)) * sample_size
     local dy = (y + math.floor(camera_y)) * sample_size
-    return love.math.noise(dx, dy)
-end
-
-local function reset()
-    print("reset")
-    seed = love.math.random(0, 10000000)
+    return love.math.noise(dx, dy, noise_z)
 end
 
 function love.keypressed(key, _, _)
     if key == "r" then
-        reset()
+        noise_z = love.math.random(0, 1000000)
     end
 end
 
@@ -39,8 +35,8 @@ function love.update(dt)
 
     if sample_size > 0.25 then
         sample_size = 0.25
-    elseif sample_size < 0.02 then
-        sample_size = 0.02
+    elseif sample_size < 0.01 then
+        sample_size = 0.01
     end
 
     local speed = 20
